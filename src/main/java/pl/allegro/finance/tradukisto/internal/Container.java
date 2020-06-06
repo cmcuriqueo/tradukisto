@@ -9,6 +9,8 @@ import pl.allegro.finance.tradukisto.internal.languages.czech.CzechValuesForSmal
 import pl.allegro.finance.tradukisto.internal.languages.english.EnglishValues;
 import pl.allegro.finance.tradukisto.internal.languages.french.FrenchIntegerToWordsConverter;
 import pl.allegro.finance.tradukisto.internal.languages.french.FrenchValues;
+import pl.allegro.finance.tradukisto.internal.languages.spanish.SpanishIntegerToWordsConverter;
+import pl.allegro.finance.tradukisto.internal.languages.spanish.SpanishValues;
 import pl.allegro.finance.tradukisto.internal.languages.german.GermanIntegerToWordsConverter;
 import pl.allegro.finance.tradukisto.internal.languages.german.GermanThousandToWordsConverter;
 import pl.allegro.finance.tradukisto.internal.languages.german.GermanValues;
@@ -93,6 +95,23 @@ public final class Container {
                 new IntegerToWordsConverter(hundredsToWordsConverter, values.pluralForms());
         IntegerToStringConverter converter =
                 new FrenchIntegerToWordsConverter(frenchIntegerToWordsConverter, values.exceptions(), values.pluralForms());
+
+        BigDecimalToStringConverter bigDecimalBankingMoneyValueConverter =
+                new BigDecimalToBankingMoneyConverter(converter, values.currency());
+
+        return new Container(converter, bigDecimalBankingMoneyValueConverter);
+    }
+
+    public static Container spanishContainer() {
+
+        SpanishValues values = new SpanishValues();
+
+        HundredsToWordsConverter hundredsToWordsConverter =
+                new HundredsToWordsConverter(values.baseNumbers(), values.twoDigitsNumberSeparator());
+        IntegerToWordsConverter spanishIntegerToWordsConverter =
+                new IntegerToWordsConverter(hundredsToWordsConverter, values.pluralForms());
+        IntegerToStringConverter converter =
+                new SpanishIntegerToWordsConverter(spanishIntegerToWordsConverter, values.exceptions(), values.pluralForms());
 
         BigDecimalToStringConverter bigDecimalBankingMoneyValueConverter =
                 new BigDecimalToBankingMoneyConverter(converter, values.currency());
